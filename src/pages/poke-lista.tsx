@@ -2,7 +2,7 @@ import { useQuery, gql } from "@apollo/client";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 
-const GET_POKEMONS = gql`
+const Trae_Lista_Pokemon = gql`
   query GetPokemons($name: String, $type: String) {
     pokemon_v2_pokemon(
       limit: 20
@@ -28,7 +28,7 @@ const GET_POKEMONS = gql`
 export const PokemonList = () => {
   const [search, setSearch] = useState("");
   const [type, setType] = useState("");
-  const { loading, error, data } = useQuery(GET_POKEMONS, {
+  const { loading, error, data } = useQuery(Trae_Lista_Pokemon, {
     variables: { name: `%${search}%`, type: type ? `%${type}%` : "%%" },
     fetchPolicy: "no-cache",
   });
@@ -41,7 +41,9 @@ export const PokemonList = () => {
   if (error) return <p className="text-center text-red-500 mt-10">Error al cargar los datos.</p>;
 
   return (
+    
     <div className="container mx-auto p-4">
+       <Link to="/">Volver al inicio </Link>
       <h1 className="text-3xl font-bold text-center mb-6">Lista de Pokémon</h1>
       <div className="flex justify-center gap-4 mb-6">
         <input
@@ -83,6 +85,7 @@ export const PokemonList = () => {
           </Link>
         ))}
       </div>
+     
     </div>
   );
 };
