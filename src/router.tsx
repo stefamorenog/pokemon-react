@@ -3,6 +3,7 @@ import { Home } from "./pages/home";
 import { PokemonList } from "./pages/poke-lista";
 import { PokemonDet } from "./pages/poke-det";
 
+
 export const AppRouter = () => (
   <Router>
     <Routes>

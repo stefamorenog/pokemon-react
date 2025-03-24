@@ -5,14 +5,14 @@ import { useState } from "react";
 const GET_POKEMONS = gql`
   query GetPokemons($name: String, $type: String) {
     pokemon_v2_pokemon(
-      limit: 20,
+      limit: 20
       where: {
-        name: { _ilike: $name },
+        name: { _ilike: $name }
         pokemon_v2_pokemontypes: { pokemon_v2_type: { name: { _ilike: $type } } }
       }
     ) {
-      name
       id
+      name
       pokemon_v2_pokemonsprites {
         sprites
       }
@@ -30,7 +30,12 @@ export const PokemonList = () => {
   const [type, setType] = useState("");
   const { loading, error, data } = useQuery(GET_POKEMONS, {
     variables: { name: `%${search}%`, type: type ? `%${type}%` : "%%" },
+    fetchPolicy: "no-cache",
   });
+
+  console.log("Loading:", loading);
+  console.log("Error:", error);
+  console.log("Data:", data);
 
   if (loading) return <p className="text-center mt-10">Cargando...</p>;
   if (error) return <p className="text-center text-red-500 mt-10">Error al cargar los datos.</p>;
@@ -59,13 +64,18 @@ export const PokemonList = () => {
         </select>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {data.pokemon_v2_pokemon.map((pokemon: any) => (
-          <Link to={`/pokemon/${pokemon.name}`} key={pokemon.id} className="border p-4 rounded-lg shadow-md hover:shadow-lg transition">
+        {data?.pokemon_v2_pokemon?.map((pokemon: any) => (
+          <Link to={`/pokemondet/${pokemon.name}`} key={pokemon.id} className="border p-4 rounded-lg shadow-md hover:shadow-lg transition">
             <img
-              src={JSON.parse(pokemon.pokemon_v2_pokemonsprites[0].sprites).front_default}
-              alt={pokemon.name}
-              className="w-full h-32 object-contain"
+             src={
+             typeof pokemon.pokemon_v2_pokemonsprites[0].sprites === "string"
+              ? JSON.parse(pokemon.pokemon_v2_pokemonsprites[0].sprites).front_default
+              : pokemon.pokemon_v2_pokemonsprites[0].sprites.front_default
+             }
+            alt={pokemon.name}
+            className="w-full h-32 object-contain"
             />
+
             <h2 className="text-lg font-bold text-center capitalize">{pokemon.name}</h2>
             <p className="text-center text-sm text-gray-500">
               {pokemon.pokemon_v2_pokemontypes.map((t: any) => t.pokemon_v2_type.name).join(", ")}
@@ -76,3 +86,4 @@ export const PokemonList = () => {
     </div>
   );
 };
+

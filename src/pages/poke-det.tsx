@@ -1,8 +1,8 @@
+import { useParams } from "react-router-dom";
 import { useQuery, gql } from "@apollo/client";
-import { useParams, Link } from "react-router-dom";
 
-const GET_POKEMON_DETAIL = gql`
-  query GetPokemonDetail($name: String!) {
+const GET_POKEMON_DETAILS = gql`
+  query GetPokemonDetails($name: String!) {
     pokemon_v2_pokemon(where: { name: { _eq: $name } }) {
       id
       name
@@ -10,12 +10,6 @@ const GET_POKEMON_DETAIL = gql`
       weight
       pokemon_v2_pokemonsprites {
         sprites
-      }
-      pokemon_v2_pokemonstats {
-        base_stat
-        pokemon_v2_stat {
-          name
-        }
       }
       pokemon_v2_pokemontypes {
         pokemon_v2_type {
@@ -27,36 +21,36 @@ const GET_POKEMON_DETAIL = gql`
 `;
 
 export const PokemonDet = () => {
-  const { name } = useParams<{ name: string }>();
-  const { loading, error, data } = useQuery(GET_POKEMON_DETAIL, {
+  const { name } = useParams(); // Obtiene el nombre del URL
+  const { loading, error, data } = useQuery(GET_POKEMON_DETAILS, {
     variables: { name },
   });
 
-  if (loading) return <p className="text-center mt-10">Cargando...</p>;
-  if (error) return <p className="text-center text-red-500 mt-10">Error al cargar los datos.</p>;
+  if (loading) return <p>Cargando...</p>;
+  if (error) return <p>Error al cargar el Pokémon</p>;
+  if (!data || !data.pokemon_v2_pokemon.length) return <p>Pokémon no encontrado</p>;
 
   const pokemon = data.pokemon_v2_pokemon[0];
-  const sprite = JSON.parse(pokemon.pokemon_v2_pokemonsprites[0].sprites).front_default;
 
   return (
     <div className="container mx-auto p-4 text-center">
-      <h1 className="text-3xl font-bold capitalize mb-4">{pokemon.name}</h1>
-      <img src={sprite} alt={pokemon.name} className="mx-auto w-40 h-40" />
-      <p className="text-lg">Altura: {pokemon.height / 10} m</p>
-      <p className="text-lg">Peso: {pokemon.weight / 10} kg</p>
-      <h2 className="text-xl font-bold mt-4">Estadísticas</h2>
-      <ul className="list-disc list-inside">
-        {pokemon.pokemon_v2_pokemonstats.map((stat: any) => (
-          <li key={stat.pokemon_v2_stat.name}>
-            {stat.pokemon_v2_stat.name}: {stat.base_stat}
-          </li>
-        ))}
-      </ul>
-      <Link to="/pokemon" className="mt-6 inline-block px-6 py-3 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-700 transition">
-        Volver a la lista
-      </Link>
+      <h1 className="text-4xl font-bold capitalize">{pokemon.name}</h1>
+      <img
+        src={
+          typeof pokemon.pokemon_v2_pokemonsprites[0].sprites === "string"
+            ? JSON.parse(pokemon.pokemon_v2_pokemonsprites[0].sprites).front_default
+            : pokemon.pokemon_v2_pokemonsprites[0].sprites.front_default
+        }
+        alt={pokemon.name}
+        className="mx-auto w-48 h-48"
+      />
+      <p className="text-lg mt-2">Altura: {pokemon.height}</p>
+      <p className="text-lg">Peso: {pokemon.weight}</p>
+      <p className="text-lg">
+  Tipos:{" "}
+  {pokemon.pokemon_v2_pokemontypes?.map((t: { pokemon_v2_type: { name: string } }) => t.pokemon_v2_type.name).join(", ") || "Desconocido"}
+</p>
     </div>
   );
 };
-
 
