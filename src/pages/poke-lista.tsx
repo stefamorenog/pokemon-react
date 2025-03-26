@@ -1,6 +1,7 @@
 import { useQuery, gql } from "@apollo/client";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { style } from "framer-motion/client";
 
 const Trae_Lista_Pokemon = gql`
   query GetPokemons($name: String, $type: String, $offset: Int, $limit: Int) {
@@ -53,10 +54,10 @@ export const PokemonList = () => {
     return (
       <div
         className="flex flex-col justify-center items-center min-h-screen bg-cover bg-center"
-        style={{ backgroundImage: "url('/loading.jpg')" }} 
+        style={{ backgroundImage: "url('https://media.giphy.com/media/yhfTY8JL1wIAE/giphy.gif?cid=790b7611hcy7ezjil4ae9850ti3rzm673o9r347i8agsph6j&ep=v1_gifs_search&rid=giphy.gif&ct=g')" }} 
       >
-        <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-500"></div>
-        <p className="mt-4 text-lg font-semibold text-white">Cargando Pokémon...</p>
+        <div className="animate-spin border-b-4 border-blue"></div>
+        <p className="mt-4 text-3xl font-semibold text-black">Cargando Pokémon...</p>
       </div>
     );
   if (error) return <p className="text-center text-red-500 mt-10">Error al cargar los datos.</p>;
@@ -66,24 +67,24 @@ export const PokemonList = () => {
       className="min-h-screen bg-cover bg-center bg-no-repeat p-4"
       style={{ backgroundImage: "url('/background.jpg')" }} 
     >
-      <div className="container mx-auto bg-white bg-opacity-90 p-6 rounded-lg shadow-lg">
-        <Link
-          to="/"
-          className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-lg text-lg transition duration-300"
-        >
+      <div className="container mx-auto bg-opacity-90 p-6 rounded-lg shadow-lg bg-r">
+        <Link to="/"
+          className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-lg justify-end transition duration-300">
           Volver al inicio
         </Link>
+        <div className="w-32 h-32 justify-self-center"><img src="/iconpes.png" alt="" /></div>
+        
         <h1 className="text-3xl font-bold text-center mb-6">Lista de Pokémon</h1>
         <div className="flex justify-center gap-4 mb-6">
           <input
             type="text"
             placeholder="Buscar por nombre"
-            className="border px-4 py-2 rounded"
+            className="border px-8 py-2 rounded"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
           <select
-            className="border px-4 py-2 rounded"
+            className="border px-6 py-2 rounded"
             value={type}
             onChange={(e) => setType(e.target.value)}
           >
@@ -94,14 +95,13 @@ export const PokemonList = () => {
             <option value="electric">Eléctrico</option>
           </select>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 ">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {data?.pokemon_v2_pokemon?.map((pokemon: any) => (
             <Link
               to={`/pokemondet/${pokemon.name}`}
               key={pokemon.id}
-              className="border p-4 rounded-lg shadow-md hover:shadow-lg transition bg-white bg-opacity-80"
-            >
-              <div className="group relative bg-white p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-2xl">
+              className="border p-1 rounded-lg shadow-md hover:shadow-lg transition bg-opacity-80">
+              <div className="group relative bg-red-500 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-2xl">
                 <img
                   src={
                     typeof pokemon.pokemon_v2_pokemonsprites[0].sprites === "string"
@@ -109,8 +109,8 @@ export const PokemonList = () => {
                       : pokemon.pokemon_v2_pokemonsprites[0].sprites.front_default
                   }
                   alt={pokemon.name}
-                  className="w-full h-32 object-contain min-h-screen bg-center bg-no-repeat p-4"
-                  style={{ backgroundImage: "url('/pokedex1.jpg')" }} 
+                  className="object-contain min-h-screen bg-center bg-no-repeat p-4"
+                  style={{ backgroundImage: "url('/pokedex1.jpg') " }} 
                   
                 />
               </div>                      
@@ -124,8 +124,7 @@ export const PokemonList = () => {
         <div className="flex justify-center mt-6">
           <button
             className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-lg text-lg transition duration-300"
-            onClick={loadMore}
-          >
+            onClick={loadMore}>
             Cargar más
           </button>
         </div>

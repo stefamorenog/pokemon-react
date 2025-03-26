@@ -1,82 +1,3 @@
-/*import { useParams } from "react-router-dom";
-import { useQuery, gql } from "@apollo/client";
-import { Link } from "react-router-dom";
-
-const Trae_Deta_Pokemon = gql`
-  query GetPokemonDetails($name: String!) {
-    pokemon_v2_pokemon(where: { name: { _eq: $name } }) {
-      id
-      name
-      height
-      weight
-      pokemon_v2_pokemontypes {
-        pokemon_v2_type {
-          name
-        }
-      }
-      pokemon_v2_pokemonstats {
-        base_stat
-        pokemon_v2_stat {
-          name
-        }
-      }
-      pokemon_v2_pokemonabilities {
-        pokemon_v2_ability {
-          name
-        }
-      }
-      pokemon_v2_pokemonsprites {
-        sprites
-      }
-    }
-  }
-`;
-
-export const PokemonDet = () => {
-  const { name } = useParams();
-  const { loading, error, data } = useQuery(Trae_Deta_Pokemon, {
-    variables: { name },
-  });
-
-  if (loading) return <p>Cargando...</p>;
-  if (error) return <p>Error al cargar el Pokémon</p>;
-  if (!data || !data.pokemon_v2_pokemon.length) return <p>Pokémon no encontrado</p>;
-
-  const pokemon = data.pokemon_v2_pokemon[0];
-
-  return (
-    <div>
-      <h1 >{pokemon.name}</h1>
-      <img
-        src={
-          typeof pokemon.pokemon_v2_pokemonsprites[0].sprites === "string"
-            ? JSON.parse(pokemon.pokemon_v2_pokemonsprites[0].sprites).front_default
-            : pokemon.pokemon_v2_pokemonsprites[0].sprites.front_default
-        }
-        alt={pokemon.name}
-      />
-      <p >Altura: {pokemon.height}</p>
-      <p >Peso: {pokemon.weight}</p>
-      <p >
-      Tipos:{" "}
-        {pokemon.pokemon_v2_pokemontypes?.map((t: { pokemon_v2_type: { name: string } }) => t.pokemon_v2_type.name).join(", ") || "Desconocido"}
-      </p>
-      <div >
-        <h2>Estadísticas de Combate</h2>
-        <ul>
-          {pokemon.pokemon_v2_pokemonstats.map((stat: any) => (
-            <li key={stat.pokemon_v2_stat.name}>
-              <span className="capitalize">{stat.pokemon_v2_stat.name}:</span>
-              <span className="font-semibold">{stat.base_stat}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-      <Link to="/pokemonlist">Ver todos  </Link>
-    </div>
-  );
-};*/
-
 import { useParams } from "react-router-dom";
 import { useQuery, gql } from "@apollo/client";
 import { Link } from "react-router-dom";
@@ -121,10 +42,10 @@ export const PokemonDet = () => {
     return (
       <div
         className="flex flex-col justify-center items-center min-h-screen bg-cover bg-center"
-        style={{ backgroundImage: "url('/loading.jpg')" }} 
+        style={{ backgroundImage: "url('https://media.giphy.com/media/yhfTY8JL1wIAE/giphy.gif?cid=790b7611hcy7ezjil4ae9850ti3rzm673o9r347i8agsph6j&ep=v1_gifs_search&rid=giphy.gif&ct=g')  max-width: 100%"}} 
       >
         <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-500"></div>
-        <p className="mt-4 text-lg font-semibold text-white">Cargando Pokémon...</p>
+        <p className="mt-4 text-3xl font-semibold text-white">Cargando Pokémon...</p>
       </div>
     );
   if (error) return <p className="text-center text-red-500 mt-10">Error al cargar los datos.</p>;
