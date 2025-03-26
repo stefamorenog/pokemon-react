@@ -1,7 +1,7 @@
 import { useQuery, gql } from "@apollo/client";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { style } from "framer-motion/client";
+
 
 const Trae_Lista_Pokemon = gql`
   query GetPokemons($name: String, $type: String, $offset: Int, $limit: Int) {
